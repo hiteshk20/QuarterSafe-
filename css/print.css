@@ -1,0 +1,165 @@
+/**
+ * QUARANTIN — Print Styles
+ * Activated when body has 'printing' class or via @media print.
+ * Used for PDF export via window.print().
+ */
+
+/* Hide everything except the print content */
+@media print {
+  body {
+    background: white !important;
+    color: #000 !important;
+  }
+
+  .app-header,
+  .app-nav,
+  .status-banner,
+  .install-banner,
+  .toast-container,
+  .calculator-input-section,
+  .output-card,
+  .calculator-cta,
+  .quarterly-tracker,
+  .locked-overlay,
+  .modal-overlay,
+  .history-actions,
+  .btn-delete {
+    display: none !important;
+  }
+
+  .app-main {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .screen {
+    display: none !important;
+  }
+
+  #screen-history {
+    display: block !important;
+  }
+
+  .feature-locked {
+    position: static !important;
+  }
+
+  .locked-content {
+    filter: none !important;
+    pointer-events: auto !important;
+  }
+
+  /* Print Header */
+  .print-header {
+    display: block !important;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #000;
+  }
+
+  .print-header-title {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .print-header-date {
+    font-size: 14px;
+    color: #666;
+  }
+
+  /* Table Styling for Print */
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+
+  .history-table th,
+  .history-table td {
+    border: 1px solid #ccc;
+    padding: 8px 6px;
+    text-align: right;
+  }
+
+  .history-table th {
+    background-color: #f0f0f0 !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+
+  .history-table th:first-child,
+  .history-table td:first-child {
+    text-align: left;
+  }
+
+  .history-table tbody tr {
+    page-break-inside: avoid;
+  }
+
+  .ytd-total-row {
+    font-weight: 700;
+    background-color: #f9f9f9 !important;
+  }
+
+  /* YTD Summary for Print */
+  .ytd-cards {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .ytd-card {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: center;
+  }
+
+  /* Page Breaks */
+  .history-table-container {
+    page-break-inside: auto;
+  }
+
+  /* Remove shadows and rounded corners */
+  .history-table-container,
+  .ytd-card {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Print Header (hidden on screen, shown in print) */
+.print-header {
+  display: none;
+}
+
+/* When body has 'printing' class, show print layout */
+body.printing .print-header {
+  display: block;
+}
+
+body.printing .app-header,
+body.printing .app-nav,
+body.printing .status-banner,
+body.printing .install-banner,
+body.printing .toast-container,
+body.printing .calculator-input-section,
+body.printing .output-card,
+body.printing .calculator-cta,
+body.printing .quarterly-tracker,
+body.printing .locked-overlay,
+body.printing .modal-overlay,
+body.printing .history-actions {
+  display: none !important;
+}
+
+body.printing #screen-history {
+  display: block !important;
+}
+
+body.printing .locked-content {
+  filter: none !important;
+}
