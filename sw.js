@@ -1,5 +1,5 @@
 /** QUARANTIN Service Worker — cache v2 (relative paths for GitHub Pages). */
-const CACHE_NAME = 'quarantin-cache-v2';
+const CACHE_NAME = 'quarantin-cache-v3';
 const APP_SHELL = [
   './', './index.html', './manifest.json',
   './css/themes.css', './css/main.css', './css/components.css', './css/animations.css', './css/print.css',
