@@ -1,147 +1,62 @@
-/**
- * QUARANTIN — Export Module
- * PDF export (window.print() + print CSS) and CSV export (Blob).
- * No external libraries.
- */
-
+/** QUARANTIN — CSV + PDF export (no libraries). */
 const Export = {
   /**
-   * Exports payment history as a CSV file.
-   * Uses Blob + URL.createObjectURL for download.
+   * Export payments as CSV download.
    * @returns {void}
-   * @example
-   * Export.exportCSV()
+   * @example Export.exportCSV()
    */
-  exportCSV() {
-    Storage.getAllPayments().then((payments) => {
-      if (payments.length === 0) {
-        UI.showToast('No payments to export', 'error');
-        return;
-      }
-
-      // Build CSV string
-      const headers = ['Date', 'Gross', 'SE Tax', 'Federal Tax', 'State Tax', 'Total Tax', 'Net Take-Home', 'Quarantine Amount', 'Effective Rate'];
-      const rows = payments.map((p) => {
-        return [
-          p.date,
-          p.gross.toFixed(2),
-          p.seTax.toFixed(2),
-          p.federalTax.toFixed(2),
-          p.stateTax.toFixed(2),
-          p.totalTax.toFixed(2),
-          p.netTakeHome.toFixed(2),
-          p.quarantineAmount.toFixed(2),
-          (p.effectiveRate * 100).toFixed(1) + '%'
-        ].map((field) => '"' + String(field).replace(/"/g, '""') + '"').join(',');
-      });
-
-      const csvContent = [headers.join(','), ...rows].join('\n');
-
-      // Create Blob and trigger download
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      const year = getCurrentYear();
-
-      link.setAttribute('href', url);
-      link.setAttribute('download', 'quarantin-export-' + year + '.csv');
-      link.style.display = 'none';
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      // Cleanup
-      setTimeout(() => URL.revokeObjectURL(url), 100);
-
-      UI.showToast('CSV exported successfully', 'success');
+  exportCSV(){
+    Storage.getAllPayments().then(ps=>{
+      if(!ps.length){UI.showToast('Nothing to export','error');return;}
+      const head=['Date','Gross','SE Tax','Federal Tax','State Tax','Total Tax','Net','Quarantine','Effective Rate'];
+      const rows=ps.map(p=>[p.date,p.gross.toFixed(2),p.seTax.toFixed(2),p.federalTax.toFixed(2),p.stateTax.toFixed(2),p.totalTax.toFixed(2),p.netTakeHome.toFixed(2),p.quarantineAmount.toFixed(2),(p.effectiveRate*100).toFixed(1)+'%']
+        .map(f=>'"'+String(f).replace(/"/g,'""')+'"').join(','));
+      const csv=[head.join(','),...rows].join('\n');
+      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;a.download='quarantin-export-'+getCurrentYear()+'.csv';
+      document.body.appendChild(a);a.click();a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),100);
+      UI.showToast('CSV exported','success');
     });
   },
 
   /**
-   * Exports payment history as PDF using window.print().
-   * Adds 'printing' class to body to activate print CSS.
+   * Export as PDF via print dialog.
    * @returns {void}
-   * @example
-   * Export.exportPDF()
+   * @example Export.exportPDF()
    */
-  exportPDF() {
-    Storage.getAllPayments().then((payments) => {
-      if (payments.length === 0) {
-        UI.showToast('No payments to export', 'error');
-        return;
-      }
-
-      // Ensure we're on history screen for print
+  exportPDF(){
+    Storage.getAllPayments().then(ps=>{
+      if(!ps.length){UI.showToast('Nothing to export','error');return;}
       UI.showScreen('screen-history');
-
-      // Add print header
-      this.addPrintHeader();
-
-      // Add printing class to activate print CSS
+      this.addHeader();
       document.body.classList.add('printing');
-
-      // Trigger print dialog
       window.print();
-
-      // Remove printing class after print dialog closes
-      const afterPrint = () => {
-        document.body.classList.remove('printing');
-        this.removePrintHeader();
-        window.removeEventListener('afterprint', afterPrint);
-      };
-
-      window.addEventListener('afterprint', afterPrint);
-
-      // Fallback: remove class after 2 seconds if afterprint doesn't fire
-      setTimeout(() => {
-        document.body.classList.remove('printing');
-        this.removePrintHeader();
-      }, 2000);
+      const done=()=>{document.body.classList.remove('printing');this.removeHeader();window.removeEventListener('afterprint',done);};
+      window.addEventListener('afterprint',done);
+      setTimeout(done,2000);
     });
   },
 
   /**
-   * Adds a print-specific header to the history screen.
+   * Insert print header.
    * @returns {void}
    */
-  addPrintHeader() {
-    // Remove existing print header if any
-    this.removePrintHeader();
-
-    const historyScreen = document.getElementById('screen-history');
-    if (!historyScreen) return;
-
-    const header = document.createElement('div');
-    header.className = 'print-header';
-    header.id = 'print-header';
-
-    const title = document.createElement('div');
-    title.className = 'print-header-title';
-    title.textContent = 'QUARANTIN — Tax Report ' + getCurrentYear();
-
-    const dateLine = document.createElement('div');
-    dateLine.className = 'print-header-date';
-    dateLine.textContent = 'Generated: ' + formatDateTime(new Date());
-
-    header.appendChild(title);
-    header.appendChild(dateLine);
-
-    // Insert at the beginning of the locked-content
-    const lockedContent = historyScreen.querySelector('.locked-content');
-    if (lockedContent) {
-      lockedContent.insertBefore(header, lockedContent.firstChild);
-    }
+  addHeader(){
+    this.removeHeader();
+    const screen=document.getElementById('screen-history');if(!screen)return;
+    const h=document.createElement('div');h.className='print-header';h.id='print-header';
+    const t=document.createElement('div');t.className='print-header-title';t.textContent='QUARANTIN — Tax Report '+getCurrentYear();
+    const d=document.createElement('div');d.className='print-header-date';d.textContent='Generated: '+formatDateTime(new Date());
+    h.appendChild(t);h.appendChild(d);
+    screen.insertBefore(h,screen.firstChild);
   },
 
   /**
-   * Removes the print-specific header.
+   * Remove print header.
    * @returns {void}
    */
-  removePrintHeader() {
-    const header = document.getElementById('print-header');
-    if (header && header.parentNode) {
-      header.parentNode.removeChild(header);
-    }
-  }
+  removeHeader(){const h=document.getElementById('print-header');if(h)h.remove();}
 };
