@@ -191,3 +191,8 @@
   .settings-actions{flex-direction:row}
   .currency-input{height:84px}
 }
+/* ===== Accessibility contrast fixes (WCAG AA) ===== */
+.nav-tab { color: var(--color-text-secondary); }          /* #94A3B8 in dark mode */
+.nav-tab .nav-label { color: inherit; }
+.nav-tab.active { color: var(--color-accent-primary); }
+.ad-placeholder { color: var(--color-text-secondary); }   /* ≥4.5:1 on #1E2940 */
