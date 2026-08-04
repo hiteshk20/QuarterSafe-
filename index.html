@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="QUARANTIN — Instant tax calculator for freelancers. Know exactly what the IRS, your state, and you get from every payment.">
+  <meta name="description" content="QUARANTIN — Free instant tax calculator for freelancers. Know exactly what the IRS, your state, and you get from every payment.">
   <meta name="theme-color" content="#0A0F1E">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="QUARANTIN">
@@ -19,575 +20,284 @@
   <title>QUARANTIN — Freelancer Tax Calculator</title>
 </head>
 <body>
-  <!-- Offline/Online Status Banner -->
+  <!-- Status banner (online/offline) -->
   <div id="status-banner" class="status-banner hidden" role="alert" aria-live="polite">
     <span id="status-banner-text"></span>
   </div>
 
-  <!-- Install Banner -->
-  <div id="install-banner" class="install-banner hidden" role="banner">
-    <div class="install-banner-content">
-      <span class="install-banner-text">Install QUARANTIN for offline access</span>
-      <button id="install-btn" class="btn btn-sm btn-primary" aria-label="Install app">Install</button>
-      <button id="install-dismiss" class="btn-icon" aria-label="Dismiss install banner">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
+  <!-- Data caution banner (dismissible) -->
+  <div id="caution-banner" class="caution-banner hidden" role="alert">
+    <span class="caution-icon" aria-hidden="true">⚠️</span>
+    <span class="caution-text">Your data is stored <strong>only on this device</strong>. If you clear browser data or history, it will be permanently wiped. Use <strong>Export</strong> to back up.</span>
+    <button id="caution-dismiss" class="btn-icon-sm" aria-label="Dismiss caution">✕</button>
   </div>
 
-  <!-- Main App Container -->
+  <!-- Install banner -->
+  <div id="install-banner" class="install-banner hidden" role="banner">
+    <span class="install-text">Install QUARANTIN for offline access</span>
+    <button id="install-btn" class="btn btn-sm btn-primary">Install</button>
+    <button id="install-dismiss" class="btn-icon-sm" aria-label="Dismiss install banner">✕</button>
+  </div>
+
   <div id="app" class="app-container">
     <!-- Header -->
     <header class="app-header">
       <div class="header-brand">
-        <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <circle cx="14" cy="14" r="12" stroke="var(--color-accent-primary)" stroke-width="2" fill="none"/>
-          <path d="M20 18L26 18L23 26L20 18Z" fill="var(--color-accent-primary)"/>
-          <rect x="21.5" y="20" width="3" height="2" rx="0.5" fill="var(--color-bg-primary)"/>
+        <svg class="logo-icon" width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <circle cx="14" cy="14" r="11" stroke="var(--color-accent-primary)" stroke-width="2.5" fill="none"/>
+          <path d="M20 18h7l-3.5 9-3.5-9z" fill="var(--color-accent-primary)"/>
         </svg>
         <h1 class="logo-wordmark">QUARANTIN</h1>
+        <span class="free-badge">FREE</span>
       </div>
-      <div class="header-actions">
-        <button id="theme-toggle" class="btn-icon" aria-label="Toggle dark/light mode">
-          <svg class="icon-sun hidden" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="2"/>
-            <path d="M10 2V4M10 16V18M2 10H4M16 10H18M4.93 4.93L6.34 6.34M13.66 13.66L15.07 15.07M4.93 15.07L6.34 13.66M13.66 6.34L15.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <svg class="icon-moon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M17 12.5A7.5 7.5 0 017.5 3 7.5 7.5 0 1017 12.5z" stroke="currentColor" stroke-width="2" fill="none"/>
-          </svg>
-        </button>
-        <button id="settings-gear" class="btn-icon" aria-label="Open settings">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M10 13a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2"/>
-            <path d="M17.4 12.1c.2-.7.3-1.4.3-2.1s-.1-1.4-.3-2.1l2-1.5-2-3.5-2.4.8a7.9 7.9 0 00-3.6-2L11 1H9l-.4 2.7a7.9 7.9 0 00-3.6 2l-2.4-.8-2 3.5 2 1.5c-.2.7-.3 1.4-.3 2.1s.1 1.4.3 2.1l-2 1.5 2 3.5 2.4-.8a7.9 7.9 0 003.6 2L9 19h2l.4-2.7a7.9 7.9 0 003.6-2l2.4.8 2-3.5-2-1.5z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          </svg>
-        </button>
-      </div>
+      <button id="theme-toggle" class="btn-icon" aria-label="Toggle dark/light mode">
+        <svg class="icon-sun hidden" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M10 2V4M10 16V18M2 10H4M16 10H18M4.9 4.9l1.4 1.4M13.7 13.7l1.4 1.4M4.9 15.1l1.4-1.4M13.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <svg class="icon-moon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M17 12.5A7.5 7.5 0 017.5 3 7.5 7.5 0 1017 12.5z" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+      </button>
     </header>
 
-    <!-- Main Content Area -->
     <main class="app-main">
-      <!-- Screen: Calculator -->
+      <!-- CALCULATOR -->
       <section id="screen-calculator" class="screen active" aria-label="Tax Calculator">
-        <!-- Quarterly Tracker (locked feature) -->
-        <div id="quarterly-tracker" class="quarterly-tracker feature-locked">
-          <div class="locked-content" aria-hidden="true">
-            <div class="quarterly-inner">
-              <div class="quarterly-label">Next Deadline</div>
-              <div class="quarterly-date">—</div>
+        <div id="quarterly-tracker" class="quarterly-tracker">
+          <div class="quarterly-inner">
+            <div class="quarterly-top">
+              <div>
+                <div class="quarterly-label">Next IRS Deadline</div>
+                <div class="quarterly-date">—</div>
+              </div>
               <div class="quarterly-countdown">
                 <span class="countdown-number">—</span>
                 <span class="countdown-label">days</span>
               </div>
-              <div class="quarterly-installment">
-                <span class="installment-label">Est. Installment Due</span>
-                <span class="installment-amount">$0.00</span>
-              </div>
             </div>
-          </div>
-          <div class="locked-overlay">
-            <svg class="lock-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
-              <path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" stroke-width="2"/>
-            </svg>
-            <span class="locked-text">Unlock Quarterly Tracker</span>
-            <button class="btn btn-primary btn-unlock" data-unlock-trigger aria-label="Unlock for $1">Unlock for $1</button>
+            <div class="quarterly-installment">
+              <span class="installment-label">Estimated Installment Due</span>
+              <span class="installment-amount">$0.00</span>
+            </div>
           </div>
         </div>
 
-        <!-- Calculator Input -->
         <div class="calculator-input-section">
           <label for="payment-input" class="input-label">Gross Payment Amount</label>
           <div class="currency-input-wrapper">
             <span class="currency-prefix" aria-hidden="true">$</span>
-            <input
-              type="text"
-              id="payment-input"
-              class="currency-input"
-              inputmode="decimal"
-              placeholder="0.00"
-              autocomplete="off"
-              aria-describedby="payment-input-error"
-            >
+            <input type="text" id="payment-input" class="currency-input" inputmode="decimal" placeholder="0.00" autocomplete="off" aria-describedby="payment-input-error">
           </div>
           <p id="payment-input-error" class="input-error hidden" role="alert"></p>
         </div>
 
-        <!-- Output Panel -->
         <div id="output-panel" class="output-card" aria-live="polite">
-          <div class="output-row">
-            <span class="output-label">Self-Employment Tax</span>
-            <span class="output-value tax-value" id="out-se-tax">$0.00</span>
-          </div>
-          <div class="output-row">
-            <span class="output-label">Federal Income Tax</span>
-            <span class="output-value tax-value" id="out-fed-tax">$0.00</span>
-          </div>
-          <div class="output-row">
-            <span class="output-label">State Income Tax</span>
-            <span class="output-value tax-value" id="out-state-tax">$0.00</span>
-          </div>
-          <div class="output-row output-divider">
-            <span class="output-label">Total Tax</span>
-            <span class="output-value tax-value" id="out-total-tax">$0.00</span>
-          </div>
-          <div class="output-row quarantine-row">
-            <span class="output-label">Quarantine Amount (+5% buffer)</span>
-            <span class="output-value quarantine-value" id="out-quarantine">$0.00</span>
-          </div>
-          <div class="output-row net-row">
-            <span class="output-label">True Net Take-Home</span>
-            <span class="output-value net-value" id="out-net">$0.00</span>
-          </div>
-          <div class="output-row">
-            <span class="output-label">Effective Tax Rate</span>
-            <span class="output-value rate-value" id="out-rate">0.0%</span>
-          </div>
+          <div class="output-row"><span class="output-label">Self-Employment Tax</span><span class="output-value tax-value" id="out-se-tax">$0.00</span></div>
+          <div class="output-row"><span class="output-label">Federal Income Tax</span><span class="output-value tax-value" id="out-fed-tax">$0.00</span></div>
+          <div class="output-row"><span class="output-label">State Income Tax</span><span class="output-value tax-value" id="out-state-tax">$0.00</span></div>
+          <div class="output-row output-divider"><span class="output-label">Total Tax</span><span class="output-value tax-value" id="out-total-tax">$0.00</span></div>
+          <div class="output-row quarantine-row"><span class="output-label">Quarantine Amount (+5%)</span><span class="output-value quarantine-value" id="out-quarantine">$0.00</span></div>
+          <div class="output-row net-row"><span class="output-label">True Net Take-Home</span><span class="output-value net-value" id="out-net">$0.00</span></div>
+          <div class="output-row"><span class="output-label">Effective Tax Rate</span><span class="output-value rate-value" id="out-rate">0.0%</span></div>
         </div>
 
-        <!-- Save / Unlock CTA -->
-        <div id="calculator-cta" class="calculator-cta">
-          <button id="btn-save-payment" class="btn btn-primary hidden">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-              <path d="M15 6L7.5 13.5L3 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Save Payment
-          </button>
-          <button id="btn-unlock-cta" class="btn btn-primary btn-unlock">
-            💾 Save this payment + unlock history — $1
-          </button>
+        <div class="calculator-cta">
+          <button id="btn-save-payment" class="btn btn-primary btn-block">💾 Save Payment to Ledger</button>
         </div>
       </section>
 
-      <!-- Screen: History -->
+      <!-- HISTORY -->
       <section id="screen-history" class="screen hidden" aria-label="Payment History">
-        <div class="feature-locked">
-          <div class="locked-content" aria-hidden="true">
-            <div class="history-header">
-              <h2 class="screen-title">Payment History</h2>
-              <div class="ytd-cards">
-                <div class="ytd-card">
-                  <span class="ytd-label">YTD Gross</span>
-                  <span class="ytd-value" id="ytd-gross">$0.00</span>
-                </div>
-                <div class="ytd-card">
-                  <span class="ytd-label">YTD Tax</span>
-                  <span class="ytd-value" id="ytd-tax">$0.00</span>
-                </div>
-                <div class="ytd-card">
-                  <span class="ytd-label">YTD Net</span>
-                  <span class="ytd-value" id="ytd-net">$0.00</span>
-                </div>
-                <div class="ytd-card">
-                  <span class="ytd-label">Payments</span>
-                  <span class="ytd-value" id="ytd-count">0</span>
-                </div>
-              </div>
-            </div>
-            <div class="history-table-container">
-              <table class="history-table" id="history-table">
-                <thead>
-                  <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Gross</th>
-                    <th scope="col">SE Tax</th>
-                    <th scope="col">Fed Tax</th>
-                    <th scope="col">State Tax</th>
-                    <th scope="col">Total Tax</th>
-                    <th scope="col">Net</th>
-                    <th scope="col"><span class="sr-only">Actions</span></th>
-                  </tr>
-                </thead>
-                <tbody id="history-tbody"></tbody>
-                <tfoot id="history-tfoot">
-                  <tr class="ytd-total-row">
-                    <td>YTD Total</td>
-                    <td id="tfoot-gross">$0.00</td>
-                    <td id="tfoot-se">$0.00</td>
-                    <td id="tfoot-fed">$0.00</td>
-                    <td id="tfoot-state">$0.00</td>
-                    <td id="tfoot-total">$0.00</td>
-                    <td id="tfoot-net">$0.00</td>
-                    <td></td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-            <div class="empty-state hidden" id="history-empty">
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <rect x="12" y="8" width="40" height="48" rx="4" stroke="var(--color-text-tertiary)" stroke-width="2"/>
-                <path d="M20 20h24M20 28h24M20 36h16" stroke="var(--color-text-tertiary)" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <p class="empty-state-text">No payments saved yet.<br>Calculate a payment and save it to start your ledger.</p>
-            </div>
-            <div class="history-actions">
-              <button id="btn-export-csv" class="btn btn-secondary">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M8 2v8M8 10l-3-3M8 10l3-3M2 12v2h12v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Export CSV
-              </button>
-              <button id="btn-export-pdf" class="btn btn-secondary">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <rect x="3" y="1" width="10" height="14" rx="1" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M5.5 5h5M5.5 7.5h5M5.5 10h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                Export PDF
-              </button>
-            </div>
-          </div>
-          <div class="locked-overlay">
-            <svg class="lock-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
-              <path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" stroke-width="2"/>
-            </svg>
-            <span class="locked-text">Unlock Payment History</span>
-            <button class="btn btn-primary btn-unlock" data-unlock-trigger aria-label="Unlock for $1">Unlock for $1</button>
-          </div>
+        <h2 class="screen-title">Payment History</h2>
+        <div class="ytd-cards">
+          <div class="ytd-card"><span class="ytd-label">YTD Gross</span><span class="ytd-value" id="ytd-gross">$0.00</span></div>
+          <div class="ytd-card"><span class="ytd-label">YTD Tax</span><span class="ytd-value danger" id="ytd-tax">$0.00</span></div>
+          <div class="ytd-card"><span class="ytd-label">YTD Net</span><span class="ytd-value success" id="ytd-net">$0.00</span></div>
+          <div class="ytd-card"><span class="ytd-label">Payments</span><span class="ytd-value" id="ytd-count">0</span></div>
         </div>
+
+        <div class="table-scroll">
+          <table class="history-table" id="history-table">
+            <thead>
+              <tr>
+                <th scope="col">Date</th><th scope="col">Gross</th><th scope="col">SE</th><th scope="col">Fed</th>
+                <th scope="col">State</th><th scope="col">Total</th><th scope="col">Net</th><th scope="col"><span class="sr-only">Delete</span></th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody"></tbody>
+            <tfoot>
+              <tr class="ytd-total-row">
+                <td>YTD</td><td id="tfoot-gross">$0.00</td><td id="tfoot-se">$0.00</td><td id="tfoot-fed">$0.00</td>
+                <td id="tfoot-state">$0.00</td><td id="tfoot-total">$0.00</td><td id="tfoot-net">$0.00</td><td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="empty-state hidden" id="history-empty">
+          <p class="empty-state-text">No payments saved yet.<br>Calculate a payment and tap “Save” to start your ledger.</p>
+        </div>
+
+        <div class="history-actions">
+          <button id="btn-export-csv" class="btn btn-secondary">⬇ CSV</button>
+          <button id="btn-export-pdf" class="btn btn-secondary">🖨 PDF</button>
+        </div>
+        <p class="local-note">⚠️ Stored only on this device. Clearing browser data wipes it — export a backup regularly.</p>
       </section>
 
-      <!-- Screen: Dashboard -->
+      <!-- DASHBOARD -->
       <section id="screen-dashboard" class="screen hidden" aria-label="Yearly Dashboard">
-        <div class="feature-locked">
-          <div class="locked-content" aria-hidden="true">
-            <h2 class="screen-title">Yearly Summary</h2>
-            <div class="kpi-grid">
-              <div class="kpi-card">
-                <span class="kpi-label">Total Gross</span>
-                <span class="kpi-value" id="kpi-gross">$0.00</span>
-              </div>
-              <div class="kpi-card">
-                <span class="kpi-label">Total Tax</span>
-                <span class="kpi-value kpi-danger" id="kpi-tax">$0.00</span>
-              </div>
-              <div class="kpi-card">
-                <span class="kpi-label">Total Net</span>
-                <span class="kpi-value kpi-success" id="kpi-net">$0.00</span>
-              </div>
-              <div class="kpi-card">
-                <span class="kpi-label">Avg Rate</span>
-                <span class="kpi-value" id="kpi-rate">0.0%</span>
-              </div>
-            </div>
-            <div class="chart-container">
-              <canvas id="ytd-chart" width="800" height="400" aria-label="Monthly gross, tax, and net bar chart" role="img"></canvas>
-            </div>
-            <div class="dashboard-stats">
-              <div class="stat-row">
-                <span class="stat-label">Highest Tax Payment</span>
-                <span class="stat-value" id="stat-highest">$0.00</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-label">Lowest Tax Payment</span>
-                <span class="stat-value" id="stat-lowest">$0.00</span>
-              </div>
-            </div>
-          </div>
-          <div class="locked-overlay">
-            <svg class="lock-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
-              <path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" stroke-width="2"/>
-            </svg>
-            <span class="locked-text">Unlock Dashboard</span>
-            <button class="btn btn-primary btn-unlock" data-unlock-trigger aria-label="Unlock for $1">Unlock for $1</button>
-          </div>
+        <h2 class="screen-title">Yearly Summary</h2>
+        <div class="kpi-grid">
+          <div class="kpi-card"><span class="kpi-label">Total Gross</span><span class="kpi-value" id="kpi-gross">$0.00</span></div>
+          <div class="kpi-card"><span class="kpi-label">Total Tax</span><span class="kpi-value danger" id="kpi-tax">$0.00</span></div>
+          <div class="kpi-card"><span class="kpi-label">Total Net</span><span class="kpi-value success" id="kpi-net">$0.00</span></div>
+          <div class="kpi-card"><span class="kpi-label">Avg Rate</span><span class="kpi-value" id="kpi-rate">0.0%</span></div>
+        </div>
+        <div class="chart-container"><canvas id="ytd-chart" aria-label="Monthly gross, tax, net chart" role="img"></canvas></div>
+        <div class="dashboard-stats">
+          <div class="stat-row"><span class="stat-label">Highest-tax payment</span><span class="stat-value" id="stat-highest">$0.00</span></div>
+          <div class="stat-row"><span class="stat-label">Lowest-tax payment</span><span class="stat-value" id="stat-lowest">$0.00</span></div>
         </div>
       </section>
 
-      <!-- Screen: Settings -->
+      <!-- SETTINGS -->
       <section id="screen-settings" class="screen hidden" aria-label="Settings">
         <h2 class="screen-title">Settings</h2>
 
         <div class="settings-section">
           <h3 class="settings-section-title">Profile</h3>
-          <div class="settings-field">
-            <label for="setting-filing-status">Filing Status</label>
+          <div class="settings-field"><label for="setting-filing-status">Filing Status</label>
             <select id="setting-filing-status" class="input-select">
               <option value="single">Single</option>
               <option value="marriedFilingJointly">Married Filing Jointly</option>
               <option value="headOfHousehold">Head of Household</option>
             </select>
           </div>
-          <div class="settings-field">
-            <label for="setting-state">State</label>
-            <select id="setting-state" class="input-select"></select>
+          <div class="settings-field"><label for="setting-state">State</label><select id="setting-state" class="input-select"></select></div>
+          <div class="settings-field"><label for="setting-w2-income">Prior W-2 Income This Year</label>
+            <div class="currency-input-wrapper small"><span class="currency-prefix">$</span><input type="text" id="setting-w2-income" class="currency-input" inputmode="decimal" placeholder="0.00"></div>
           </div>
-          <div class="settings-field">
-            <label for="setting-w2-income">Prior W-2 Income This Year</label>
-            <div class="currency-input-wrapper small">
-              <span class="currency-prefix" aria-hidden="true">$</span>
-              <input type="text" id="setting-w2-income" class="currency-input" inputmode="decimal" placeholder="0.00">
-            </div>
+          <div class="settings-field"><label for="setting-deductions">Annual Business Deductions</label>
+            <div class="currency-input-wrapper small"><span class="currency-prefix">$</span><input type="text" id="setting-deductions" class="currency-input" inputmode="decimal" placeholder="0.00"></div>
           </div>
-          <div class="settings-field">
-            <label for="setting-deductions">Estimated Annual Business Deductions</label>
-            <div class="currency-input-wrapper small">
-              <span class="currency-prefix" aria-hidden="true">$</span>
-              <input type="text" id="setting-deductions" class="currency-input" inputmode="decimal" placeholder="0.00">
-            </div>
-          </div>
-          <div class="settings-field">
-            <label for="setting-tax-year">Tax Year</label>
+          <div class="settings-field"><label for="setting-tax-year">Tax Year</label>
             <input type="number" id="setting-tax-year" class="input-text" min="2024" max="2030" value="2024">
           </div>
-          <button id="btn-save-settings" class="btn btn-primary">Save Settings</button>
+          <button id="btn-save-settings" class="btn btn-primary btn-block">Save Settings</button>
         </div>
 
         <div class="settings-section">
           <h3 class="settings-section-title">Preferences</h3>
-          <div class="settings-field toggle-field">
-            <label for="setting-theme">Dark Mode</label>
-            <button id="setting-theme" class="toggle-switch" role="switch" aria-checked="true" aria-label="Toggle dark mode">
-              <span class="toggle-thumb"></span>
-            </button>
+          <div class="settings-field toggle-field"><label for="setting-theme">Dark Mode</label>
+            <button id="setting-theme" class="toggle-switch" role="switch" aria-checked="true" aria-label="Toggle dark mode"><span class="toggle-thumb"></span></button>
           </div>
         </div>
 
         <div class="settings-section">
           <h3 class="settings-section-title">Data</h3>
+          <p class="local-note">⚠️ All data lives only in this browser. Deleting the browser or clearing history wipes everything permanently.</p>
           <div class="settings-actions">
-            <button id="btn-export-json" class="btn btn-secondary">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M8 2v8M8 10l-3-3M8 10l3-3M2 12v2h12v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Export All Data as JSON
-            </button>
-            <button id="btn-reset-data" class="btn btn-danger">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M2 4h12M5.33 4V2.67a1.33 1.33 0 011.34-1.34h2.66a1.33 1.33 0 011.34 1.34V4m2 0v9.33a1.33 1.33 0 01-1.34 1.34H4.67a1.33 1.33 0 01-1.34-1.34V4h9.34z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Reset All Data
-            </button>
+            <button id="btn-export-json" class="btn btn-secondary">Export All Data (JSON)</button>
+            <button id="btn-reset-data" class="btn btn-danger">Reset All Data</button>
           </div>
         </div>
 
         <div class="settings-section">
           <h3 class="settings-section-title">About</h3>
-          <div class="about-info">
-            <p class="about-version">Version 1.0.0</p>
-            <details class="about-details">
-              <summary class="about-summary">How calculations work</summary>
-              <div class="about-content">
-                <p><strong>Self-Employment Tax (15.3%):</strong> Applied to 92.35% of your net self-employment income. This covers Social Security (12.4%) and Medicare (2.9%). Half of this tax is deductible from your income.</p>
-                <p><strong>Federal Income Tax:</strong> Calculated using marginal tax brackets based on your projected annual income including this payment, minus standard deduction and business deductions.</p>
-                <p><strong>State Income Tax:</strong> Calculated using your state's tax rates (flat or progressive brackets).</p>
-                <p><strong>Quarantine Amount:</strong> Total tax + 5% safety buffer to ensure you never under-save.</p>
-                <p class="about-disclaimer">⚠️ This tool provides estimates only. Consult a tax professional for your specific situation.</p>
-              </div>
-            </details>
-          </div>
+          <p class="about-version">QUARANTIN Free · v2.0.0</p>
+          <details class="about-details"><summary class="about-summary">How calculations work</summary>
+            <div class="about-content">
+              <p><strong>SE Tax (15.3%)</strong> on 92.35% of net self-employment income; half is deductible.</p>
+              <p><strong>Federal</strong> via marginal 2024 brackets after standard deduction.</p>
+              <p><strong>State</strong> via your state's flat/progressive rates.</p>
+              <p><strong>Quarantine</strong> = total tax + 5% safety buffer.</p>
+              <p class="about-disclaimer">⚠️ Estimates only. Consult a tax professional.</p>
+            </div>
+          </details>
         </div>
       </section>
     </main>
 
-    <!-- Bottom Navigation -->
-    <nav class="app-nav" aria-label="Main navigation">
-      <button class="nav-tab active" data-screen="screen-calculator" aria-label="Calculate" aria-current="page">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-          <rect x="3" y="2" width="16" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-          <path d="M6 6h10M6 10h4M6 14h4M13 10h3M13 14h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span class="nav-label">Calculate</span>
-      </button>
-      <button class="nav-tab" data-screen="screen-history" aria-label="History">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-          <path d="M11 7v4l2.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span class="nav-label">History</span>
-      </button>
-      <button class="nav-tab" data-screen="screen-dashboard" aria-label="Dashboard">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-          <rect x="3" y="10" width="4" height="8" rx="1" stroke="currentColor" stroke-width="2"/>
-          <rect x="9" y="6" width="4" height="12" rx="1" stroke="currentColor" stroke-width="2"/>
-          <rect x="15" y="3" width="4" height="15" rx="1" stroke="currentColor" stroke-width="2"/>
-        </svg>
-        <span class="nav-label">Dashboard</span>
-      </button>
-      <button class="nav-tab" data-screen="screen-settings" aria-label="Settings">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-          <circle cx="11" cy="11" r="3" stroke="currentColor" stroke-width="2"/>
-          <path d="M18.4 13.1c.2-.7.3-1.4.3-2.1s-.1-1.4-.3-2.1l2-1.5-2-3.5-2.4.8a7.9 7.9 0 00-3.6-2L12 1h-2l-.4 2.7a7.9 7.9 0 00-3.6 2l-2.4-.8-2 3.5 2 1.5c-.2.7-.3 1.4-.3 2.1s.1 1.4.3 2.1l-2 1.5 2 3.5 2.4-.8a7.9 7.9 0 003.6 2l.4 2.7h2l.4-2.7a7.9 7.9 0 003.6-2l2.4.8 2-3.5-2-1.5z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
-        <span class="nav-label">Settings</span>
-      </button>
-    </nav>
+    <!-- Bottom dock: AD SLOT + NAV -->
+    <div class="bottom-dock">
+      <!-- ============ AD SLOT ============ -->
+      <!-- PASTE YOUR AD CODE / IFRAME INSIDE #ad-slot BELOW -->
+      <div id="ad-slot" class="ad-slot" aria-label="Advertisement">
+        <span class="ad-placeholder">Advertisement</span>
+      </div>
+      <!-- ================================== -->
+      <nav class="app-nav" aria-label="Main navigation">
+        <button class="nav-tab active" data-screen="screen-calculator" aria-label="Calculate" aria-current="page">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect x="3" y="2" width="16" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M6 6h10M6 10h4M6 14h4M13 10h3M13 14h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="nav-label">Calculate</span>
+        </button>
+        <button class="nav-tab" data-screen="screen-history" aria-label="History">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M11 7v4l2.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="nav-label">History</span>
+        </button>
+        <button class="nav-tab" data-screen="screen-dashboard" aria-label="Dashboard">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect x="3" y="10" width="4" height="8" rx="1" stroke="currentColor" stroke-width="2"/><rect x="9" y="6" width="4" height="12" rx="1" stroke="currentColor" stroke-width="2"/><rect x="15" y="3" width="4" height="15" rx="1" stroke="currentColor" stroke-width="2"/></svg>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <button class="nav-tab" data-screen="screen-settings" aria-label="Settings">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="3" stroke="currentColor" stroke-width="2"/><path d="M18.4 13.1c.2-.7.3-1.4.3-2.1s-.1-1.4-.3-2.1l2-1.5-2-3.5-2.4.8a7.9 7.9 0 00-3.6-2L12 1h-2l-.4 2.7a7.9 7.9 0 00-3.6 2l-2.4-.8-2 3.5 2 1.5c-.2.7-.3 1.4-.3 2.1s.1 1.4.3 2.1l-2 1.5 2 3.5 2.4-.8a7.9 7.9 0 003.6 2l.4 2.7h2l.4-2.7a7.9 7.9 0 003.6-2l2.4.8 2-3.5-2-1.5z" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          <span class="nav-label">Settings</span>
+        </button>
+      </nav>
+    </div>
   </div>
 
-  <!-- Onboarding Modal -->
+  <!-- Onboarding modal -->
   <div id="modal-onboarding" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
     <div class="modal-container">
-      <button class="modal-close" data-modal-close aria-label="Close onboarding">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-      <div class="modal-progress">
-        <span class="progress-dot active" data-step="1"></span>
-        <span class="progress-dot" data-step="2"></span>
-        <span class="progress-dot" data-step="3"></span>
-      </div>
-
-      <!-- Step 1: Filing Status -->
-      <div class="onboarding-step active" data-onboarding-step="1">
+      <div class="modal-progress"><span class="progress-dot active"></span><span class="progress-dot"></span><span class="progress-dot"></span></div>
+      <div class="onboarding-step active" data-step="1">
         <h2 id="onboarding-title" class="modal-title">What's your filing status?</h2>
         <div class="radio-cards">
-          <label class="radio-card">
-            <input type="radio" name="onboarding-filing" value="single" checked>
-            <span class="radio-card-content">
-              <span class="radio-card-title">Single</span>
-              <span class="radio-card-desc">Unmarried or legally separated</span>
-            </span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="onboarding-filing" value="marriedFilingJointly">
-            <span class="radio-card-content">
-              <span class="radio-card-title">Married Filing Jointly</span>
-              <span class="radio-card-desc">Filing together with spouse</span>
-            </span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="onboarding-filing" value="headOfHousehold">
-            <span class="radio-card-content">
-              <span class="radio-card-title">Head of Household</span>
-              <span class="radio-card-desc">Unmarried with qualifying dependent</span>
-            </span>
-          </label>
+          <label class="radio-card"><input type="radio" name="onboarding-filing" value="single" checked><span class="radio-card-content"><span class="radio-card-title">Single</span><span class="radio-card-desc">Unmarried or legally separated</span></span></label>
+          <label class="radio-card"><input type="radio" name="onboarding-filing" value="marriedFilingJointly"><span class="radio-card-content"><span class="radio-card-title">Married Filing Jointly</span><span class="radio-card-desc">Filing together with spouse</span></span></label>
+          <label class="radio-card"><input type="radio" name="onboarding-filing" value="headOfHousehold"><span class="radio-card-content"><span class="radio-card-title">Head of Household</span><span class="radio-card-desc">Unmarried with a dependent</span></span></label>
         </div>
         <button class="btn btn-primary btn-block" data-onboarding-next>Continue</button>
       </div>
-
-      <!-- Step 2: State -->
-      <div class="onboarding-step hidden" data-onboarding-step="2">
+      <div class="onboarding-step hidden" data-step="2">
         <h2 class="modal-title">What state do you work in?</h2>
         <div class="searchable-select">
           <input type="text" id="state-search" class="input-text" placeholder="Search states..." aria-label="Search states">
           <select id="onboarding-state" class="input-select" size="6" aria-label="Select your state"></select>
         </div>
-        <div class="onboarding-nav">
-          <button class="btn btn-secondary" data-onboarding-back>Back</button>
-          <button class="btn btn-primary" data-onboarding-next>Continue</button>
-        </div>
+        <div class="onboarding-nav"><button class="btn btn-secondary" data-onboarding-back>Back</button><button class="btn btn-primary" data-onboarding-next>Continue</button></div>
       </div>
-
-      <!-- Step 3: W-2 Income -->
-      <div class="onboarding-step hidden" data-onboarding-step="3">
+      <div class="onboarding-step hidden" data-step="3">
         <h2 class="modal-title">Any W-2 income this year?</h2>
-        <p class="modal-subtitle">Optional — helps calculate your marginal tax bracket more accurately.</p>
-        <div class="currency-input-wrapper">
-          <span class="currency-prefix" aria-hidden="true">$</span>
-          <input type="text" id="onboarding-w2" class="currency-input" inputmode="decimal" placeholder="0.00">
-        </div>
-        <div class="onboarding-nav">
-          <button class="btn btn-secondary" data-onboarding-back>Back</button>
-          <button class="btn btn-primary" data-onboarding-complete>Finish</button>
-        </div>
+        <p class="modal-subtitle">Optional — improves your marginal bracket accuracy.</p>
+        <div class="currency-input-wrapper"><span class="currency-prefix">$</span><input type="text" id="onboarding-w2" class="currency-input" inputmode="decimal" placeholder="0.00"></div>
+        <div class="onboarding-nav"><button class="btn btn-secondary" data-onboarding-back>Back</button><button class="btn btn-primary" data-onboarding-complete>Finish</button></div>
         <button class="btn-link" data-onboarding-skip>Skip this step</button>
       </div>
     </div>
   </div>
 
-  <!-- Unlock Modal -->
-  <div id="modal-unlock" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="unlock-title">
-    <div class="modal-container">
-      <button class="modal-close" data-modal-close aria-label="Close unlock modal">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-      <div class="unlock-content">
-        <div class="unlock-icon">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-            <circle cx="20" cy="20" r="16" stroke="var(--color-accent-primary)" stroke-width="3" fill="none"/>
-            <path d="M28 26L38 26L33 40L28 26Z" fill="var(--color-accent-primary)"/>
-            <rect x="30.5" y="30" width="5" height="3" rx="1" fill="var(--color-bg-tertiary)"/>
-          </svg>
-        </div>
-        <h2 id="unlock-title" class="modal-title">Unlock Lifetime Access</h2>
-        <p class="unlock-price">$1 — one time, forever</p>
-        <ul class="unlock-features">
-          <li>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 4L6.5 10.5L3 7" stroke="var(--color-accent-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Full payment history ledger
-          </li>
-          <li>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 4L6.5 10.5L3 7" stroke="var(--color-accent-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Quarterly deadline tracker
-          </li>
-          <li>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 4L6.5 10.5L3 7" stroke="var(--color-accent-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Yearly summary dashboard
-          </li>
-          <li>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 4L6.5 10.5L3 7" stroke="var(--color-accent-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            PDF &amp; CSV export
-          </li>
-        </ul>
-        <button id="btn-stripe-checkout" class="btn btn-primary btn-block btn-lg">
-          Unlock for $1
-        </button>
-        <div class="trust-badges">
-          <span class="trust-badge">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1L1 3.5V6.5C1 9.5 3.5 12.5 7 13.5C10.5 12.5 13 9.5 13 6.5V3.5L7 1Z" stroke="currentColor" stroke-width="1.5"/></svg>
-            No account required
-          </span>
-          <span class="trust-badge">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="2" y="5" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 5V3.5a2.5 2.5 0 015 0V5" stroke="currentColor" stroke-width="1.5"/></svg>
-            Runs 100% on your device
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Unlocked Success Modal -->
-  <div id="modal-unlocked" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="unlocked-title">
-    <div class="modal-container">
-      <div class="unlock-content">
-        <div class="unlocked-celebration">🎉</div>
-        <h2 id="unlocked-title" class="modal-title">You're Unlocked!</h2>
-        <p class="modal-subtitle">All features are now available. Your data stays on your device — always.</p>
-        <button class="btn btn-primary btn-block" data-modal-close>Start Using QUARANTIN</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reset Confirmation Modal -->
+  <!-- Reset modal -->
   <div id="modal-reset" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="reset-title">
     <div class="modal-container">
-      <button class="modal-close" data-modal-close aria-label="Close reset modal">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
       <h2 id="reset-title" class="modal-title">Reset All Data?</h2>
-      <p class="modal-subtitle">This will permanently delete all your payment history, settings, and profile data. This cannot be undone.</p>
-      <div class="settings-field">
-        <label for="reset-confirm-input">Type <strong>DELETE</strong> to confirm</label>
-        <input type="text" id="reset-confirm-input" class="input-text" placeholder="DELETE" autocomplete="off">
-      </div>
-      <div class="onboarding-nav">
-        <button class="btn btn-secondary" data-modal-close>Cancel</button>
-        <button id="btn-confirm-reset" class="btn btn-danger" disabled>Delete Everything</button>
-      </div>
+      <p class="modal-subtitle">This permanently deletes your history, settings, and profile. Cannot be undone.</p>
+      <div class="settings-field"><label for="reset-confirm-input">Type <strong>DELETE</strong> to confirm</label><input type="text" id="reset-confirm-input" class="input-text" placeholder="DELETE" autocomplete="off"></div>
+      <div class="onboarding-nav"><button class="btn btn-secondary" data-modal-close>Cancel</button><button id="btn-confirm-reset" class="btn btn-danger" disabled>Delete Everything</button></div>
     </div>
   </div>
 
-  <!-- Toast Container -->
   <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Scripts -->
   <script src="js/utils.js"></script>
   <script src="js/taxData.js"></script>
   <script src="js/calculator.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/pwa.js"></script>
   <script src="js/ui.js"></script>
-  <script src="js/unlock.js"></script>
   <script src="js/history.js"></script>
   <script src="js/quarterly.js"></script>
   <script src="js/dashboard.js"></script>
