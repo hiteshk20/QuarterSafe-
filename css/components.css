@@ -1,6 +1,9 @@
 /* ============ v2.2 — BRAND + RESPONSIVE HARDENING + COFFEE ============ */
 
-/* Prevent overflow on very small / very large screens */
+/* ===== FINAL PATCH: contrast + responsive + coffee ===== */
+.nav-tab{color:var(--color-text-secondary)}
+.nav-tab.active{color:var(--color-accent-primary)}
+.ad-placeholder{color:var(--color-text-secondary)}
 .output-row{flex-wrap:wrap}
 .output-value{font-size:clamp(12px,3.6vw,16px)}
 .net-value{font-size:clamp(16px,4.5vw,22px)}
@@ -10,6 +13,14 @@
 .quarterly-top,.quarterly-installment{flex-wrap:wrap}
 .ytd-value{font-size:clamp(14px,4vw,18px)}
 .kpi-value{font-size:clamp(18px,5vw,28px)}
+@media (min-width:1440px){.app-main{max-width:1200px}.output-value{font-size:17px}}
+.coffee-card{display:flex;align-items:center;gap:var(--space-3);margin-top:var(--space-5);padding:var(--space-4);background:var(--color-bg-secondary);border:1px solid var(--color-border-primary);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+.coffee-emoji{font-size:26px;flex-shrink:0}
+.coffee-text{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.coffee-text strong{font-size:var(--text-sm);color:var(--color-text-primary)}
+.coffee-text span{font-size:var(--text-xs);color:var(--color-text-secondary)}
+.btn-coffee{background:var(--color-accent-secondary);color:var(--color-text-inverse);white-space:nowrap;flex-shrink:0}
+.btn-coffee:hover{filter:brightness(1.08)}
 
 /* Extra-large desktop */
 @media (min-width:1440px){
