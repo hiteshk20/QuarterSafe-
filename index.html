@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="QUARANTIN — Free instant tax calculator for freelancers. Know exactly what the IRS, your state, and you get from every payment.">
-  <meta name="theme-color" content="#0A0F1E">
+  <meta name="theme-color" content="#F7F4ED">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -62,7 +62,7 @@
     </header>
 
     <main class="app-main">
-      <!-- CALCULATOR -->
+      <!-- ============ CALCULATOR (HOME) ============ -->
       <section id="screen-calculator" class="screen active" aria-label="Tax Calculator">
         <div id="quarterly-tracker" class="quarterly-tracker">
           <div class="quarterly-inner">
@@ -105,7 +105,9 @@
         <div class="calculator-cta">
           <button id="btn-save-payment" class="btn btn-primary btn-block">💾 Save Payment to Ledger</button>
         </div>
-                <div class="coffee-card">
+
+        <!-- Buy me a coffee -->
+        <div class="coffee-card">
           <span class="coffee-emoji" aria-hidden="true">☕</span>
           <div class="coffee-text">
             <strong>Enjoying QUARANTIN?</strong>
@@ -117,7 +119,7 @@
         </div>
       </section>
 
-      <!-- HISTORY -->
+      <!-- ============ HISTORY ============ -->
       <section id="screen-history" class="screen hidden" aria-label="Payment History">
         <h2 class="screen-title">Payment History</h2>
         <div class="ytd-cards">
@@ -156,7 +158,7 @@
         <p class="local-note">⚠️ Stored only on this device. Clearing browser data wipes it — export a backup regularly.</p>
       </section>
 
-      <!-- DASHBOARD -->
+      <!-- ============ DASHBOARD ============ -->
       <section id="screen-dashboard" class="screen hidden" aria-label="Yearly Dashboard">
         <h2 class="screen-title">Yearly Summary</h2>
         <div class="kpi-grid">
@@ -172,7 +174,7 @@
         </div>
       </section>
 
-      <!-- SETTINGS -->
+      <!-- ============ SETTINGS ============ -->
       <section id="screen-settings" class="screen hidden" aria-label="Settings">
         <h2 class="screen-title">Settings</h2>
 
@@ -193,7 +195,7 @@
             <div class="currency-input-wrapper small"><span class="currency-prefix">$</span><input type="text" id="setting-deductions" class="currency-input" inputmode="decimal" placeholder="0.00"></div>
           </div>
           <div class="settings-field"><label for="setting-tax-year">Tax Year</label>
-            <input type="number" id="setting-tax-year" class="input-text" min="2024" max="2030" value="2024">
+            <input type="number" id="setting-tax-year" class="input-text" min="2024" max="2030" value="2026">
           </div>
           <button id="btn-save-settings" class="btn btn-primary btn-block">Save Settings</button>
         </div>
@@ -201,7 +203,7 @@
         <div class="settings-section">
           <h3 class="settings-section-title">Preferences</h3>
           <div class="settings-field toggle-field"><label for="setting-theme">Dark Mode</label>
-            <button id="setting-theme" class="toggle-switch" role="switch" aria-checked="true" aria-label="Toggle dark mode"><span class="toggle-thumb"></span></button>
+            <button id="setting-theme" class="toggle-switch" role="switch" aria-checked="false" aria-label="Toggle dark mode"><span class="toggle-thumb"></span></button>
           </div>
         </div>
 
@@ -216,7 +218,7 @@
 
         <div class="settings-section">
           <h3 class="settings-section-title">About</h3>
-          <p class="about-version">QUARANTIN Free · v2.0.0</p>
+          <p class="about-version">QUARANTIN Free · v2.2.0</p>
           <details class="about-details"><summary class="about-summary">How calculations work</summary>
             <div class="about-content">
               <p><strong>SE Tax (15.3%)</strong> on 92.35% of net self-employment income; half is deductible.</p>
